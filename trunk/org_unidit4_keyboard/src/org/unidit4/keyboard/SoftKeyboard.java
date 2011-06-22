@@ -55,6 +55,7 @@ import android.widget.Toast;
 public class SoftKeyboard extends InputMethodService implements
 		KeyboardView.OnKeyboardActionListener {
 	static final boolean DEBUG = true;
+	static final boolean FORCE_KEYBOARD = true; // to force keyboard showup in emulator TODO remove this later
 	private static final String TAG = "myIME";
 	private static int TOAST_DELAY=1000; // minimum millisecond between toasts
 	private boolean mDisplaySoftKeyboardAlways;
@@ -99,11 +100,13 @@ public class SoftKeyboard extends InputMethodService implements
 	//TODO Remove me! Force softinput in emulator/landscape
 	@Override 
 	public boolean onEvaluateInputViewShown(){
-		return true;
+		if (FORCE_KEYBOARD) return true;
+		return super.onEvaluateInputViewShown();
 	}
 	@Override 
 	public boolean onEvaluateFullscreenMode(){
-		return false;
+		if (FORCE_KEYBOARD)	return false;
+		return super.onEvaluateFullscreenMode();
 	}
 	
 	/**
