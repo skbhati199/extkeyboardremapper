@@ -28,6 +28,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.unidit4.keyboard.R;
 
 public class CandidateView extends View {

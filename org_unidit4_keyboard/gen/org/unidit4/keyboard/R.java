@@ -22,23 +22,59 @@ public final class R {
         public static final int key_height=0x7f060000;
     }
     public static final class drawable {
-        public static final int sym_keyboard_delete=0x7f020000;
-        public static final int sym_keyboard_done=0x7f020001;
-        public static final int sym_keyboard_return=0x7f020002;
-        public static final int sym_keyboard_search=0x7f020003;
-        public static final int sym_keyboard_shift=0x7f020004;
-        public static final int sym_keyboard_space=0x7f020005;
+        public static final int set=0x7f020000;
+        public static final int sym_keyboard_delete=0x7f020001;
+        public static final int sym_keyboard_done=0x7f020002;
+        public static final int sym_keyboard_return=0x7f020003;
+        public static final int sym_keyboard_search=0x7f020004;
+        public static final int sym_keyboard_shift=0x7f020005;
+        public static final int sym_keyboard_space=0x7f020006;
+        public static final int unset=0x7f020007;
     }
     public static final class id {
+        public static final int kbdContainer=0x7f080001;
+        public static final int kbdIcon=0x7f080002;
         public static final int keyboard=0x7f080000;
     }
     public static final class layout {
         public static final int input=0x7f030000;
+        public static final int kbd_states=0x7f030001;
     }
     public static final class string {
+        /**  Accented forms of "a" 
+         */
+        public static final int alternates_for_a=0x7f070005;
+        /**  Accented forms of "c" 
+         */
+        public static final int alternates_for_c=0x7f07000c;
+        /**  Accented forms of "e" 
+         */
+        public static final int alternates_for_e=0x7f070006;
+        /**  Accented forms of "i" 
+         */
+        public static final int alternates_for_i=0x7f070007;
+        /**  Accented forms of "n" 
+         */
+        public static final int alternates_for_n=0x7f07000b;
+        /**  Accented forms of "o" 
+         */
+        public static final int alternates_for_o=0x7f070008;
+        /**  Letters associated with "s" 
+         */
+        public static final int alternates_for_s=0x7f07000a;
+        /**  Accented forms of "u" 
+         */
+        public static final int alternates_for_u=0x7f070009;
+        /**  Accented forms of "y" 
+         */
+        public static final int alternates_for_y=0x7f07000d;
+        public static final int disableToastOnKey=0x7f070010;
+        public static final int enableToastOnKey=0x7f070011;
         /**  Title for Latin keyboard  
          */
         public static final int ime_name=0x7f070000;
+        public static final int ime_settings=0x7f07000e;
+        public static final int inputMethod=0x7f07000f;
         /**  Labels on soft keys 
          */
         public static final int label_go_key=0x7f070002;
@@ -49,9 +85,10 @@ public final class R {
         public static final int word_separators=0x7f070001;
     }
     public static final class xml {
-        public static final int method=0x7f040000;
-        public static final int qwerty=0x7f040001;
-        public static final int symbols=0x7f040002;
-        public static final int symbols_shift=0x7f040003;
+        public static final int kbd_popup_template=0x7f040000;
+        public static final int method=0x7f040001;
+        public static final int qwerty=0x7f040002;
+        public static final int symbols=0x7f040003;
+        public static final int symbols_shift=0x7f040004;
     }
 }

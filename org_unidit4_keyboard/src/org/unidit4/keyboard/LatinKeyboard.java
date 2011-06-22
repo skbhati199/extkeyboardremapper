@@ -16,14 +16,16 @@
 
 package org.unidit4.keyboard;
 
+import org.unidit4.keyboard.R;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.Keyboard.Row;
+import android.util.Log;
 import android.view.inputmethod.EditorInfo;
-import org.unidit4.keyboard.R;
 
 public class LatinKeyboard extends Keyboard {
 
@@ -46,6 +48,7 @@ public class LatinKeyboard extends Keyboard {
             mEnterKey = key;
         }
         return key;
+        
     }
     
     /**
@@ -53,10 +56,19 @@ public class LatinKeyboard extends Keyboard {
      * appropriate label on the keyboard's enter key (if it has one).
      */
     void setImeOptions(Resources res, int options) {
-        if (mEnterKey == null) {
+    	Log.d("LatinKeyboard","onsetImeOptions with option :"+options);
+    	if (options==0){
+    		Log.d("setImeOptions","returning because options==0");
+    		return;
+    	}
+    	Log.d("setImeOptions","just before the test");
+    	
+        if ((mEnterKey == null)) {
+        	Log.d("MyIME","Returning because "+mEnterKey+"==null or "+options+"==0");
             return;
         }
-        
+        Log.d("LatinKeyboard", "setImeOptions: still there");
+        //TODO add super.setImeOptions before ?
         switch (options&(EditorInfo.IME_MASK_ACTION|EditorInfo.IME_FLAG_NO_ENTER_ACTION)) {
             case EditorInfo.IME_ACTION_GO:
                 mEnterKey.iconPreview = null;
