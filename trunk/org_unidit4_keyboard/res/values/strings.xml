@@ -19,7 +19,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title for Latin keyboard  -->
-    <string name="ime_name">Sample Soft Keyboard</string>
+    <string name="ime_name">laurent2o1o Keyboard</string>
 
     <!-- Symbols that are commonly considered word separators in this language -->
     <string name="word_separators">\u0020.,;:!?\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
@@ -28,4 +28,29 @@
     <string name="label_go_key">Go</string>
     <string name="label_next_key">Next</string>
     <string name="label_send_key">Send</string>
+    
+    
+        <!-- Accented forms of "a" -->
+    <string name="alternates_for_a">àáâãäåæ</string>
+    <!-- Accented forms of "e" -->
+    <string name="alternates_for_e">èéêë</string>
+    <!-- Accented forms of "i" -->
+    <string name="alternates_for_i">ìíîï</string>
+    <!-- Accented forms of "o" -->
+    <string name="alternates_for_o">òóôõöœø</string>
+    <!-- Accented forms of "u" -->
+    <string name="alternates_for_u">ùúûü</string>
+    <!-- Letters associated with "s" -->
+    <string name="alternates_for_s">§ß</string>
+    <!-- Accented forms of "n" -->
+    <string name="alternates_for_n">ñ</string>
+    <!-- Accented forms of "c" -->
+    <string name="alternates_for_c">ç</string>
+    <!-- Accented forms of "y" -->
+    <string name="alternates_for_y">ýÿ</string>
+    <string name="ime_settings">Settings</string>
+    <string name="inputMethod">Select Input Method</string>
+    <string name="disableToastOnKey">Remove key notifications</string>
+    <string name="enableToastOnKey">Enable key notifications</string>
+    
 </resources>
