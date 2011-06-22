@@ -14,6 +14,10 @@
  * the License.
  */
 
+/*
+ * Contains large modifications from laurent2o1o to support external keyboard remapping
+ */
+
 package org.unidit4.keyboard;
 
 import android.app.AlertDialog;
@@ -768,9 +772,14 @@ public class SoftKeyboard extends InputMethodService implements
 				caps = getCurrentInputConnection().getCursorCapsMode(
 						attr.inputType);
 			}
-			mInputView.setShifted(mCapsLock || caps != 0);
+			boolean changed=mInputView.setShifted(mCapsLock || caps != 0);
+			Log.d(TAG,"setShifted(mCapsLock("
+					+mCapsLock
+					+")||editorCaps("
+					+(caps!=0)
+					+") "
+					+(changed?"changed":"did not change"));
 		}
-		Log.d(TAG,"updateKeyShiftState... done");
 	}
 
 	/**
@@ -972,6 +981,9 @@ public class SoftKeyboard extends InputMethodService implements
 		} else {
 			getCurrentInputConnection().commitText(
 					String.valueOf((char) primaryCode), 1);
+			//This solves issue #5
+			updateShiftKeyState(getCurrentInputEditorInfo());
+			//
 		} 
 	}
 
