@@ -358,7 +358,7 @@ public class SoftKeyboard extends InputMethodService implements
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd, int candidatesStart,
 			int candidatesEnd) {
-		Log.d(TAG, "onUpdateSelection");
+		Log.d(TAG, "onUpdateSelection start:"+oldSelStart+"->"+newSelStart+" end:"+oldSelEnd+"->"+newSelEnd);
 		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
 				candidatesStart, candidatesEnd);
 
@@ -837,9 +837,46 @@ public class SoftKeyboard extends InputMethodService implements
 		case KeyEvent.KEYCODE_DPAD_LEFT:
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			//transmit dpad events        
-			//TODO also transmit the shift state of the soft keyboard?
-            keyDownUp(primaryCode);
- 			return;
+			
+			
+			  if (mInputView != null && mInputView.isShown() && mInputView.isShifted()) {
+				  //trying to send shift+direction keys to allow selection with soft keyboard
+				  InputConnection ic = getCurrentInputConnection();
+                  if (ic == null) return;
+                  
+				  long now = System.currentTimeMillis();
+                  // send a shift down, then dpad down up then shift up event to simulate user
+				  ic.sendKeyEvent(
+                		  new KeyEvent(
+                				  now-4,now-4,
+                				  KeyEvent.ACTION_DOWN,
+                				  KeyEvent.KEYCODE_SHIFT_LEFT,0));
+                  ic.sendKeyEvent(
+                		  new KeyEvent(
+                				  now-3,now-3,
+                				  KeyEvent.ACTION_DOWN,
+                				  primaryCode,0,KeyEvent.META_SHIFT_LEFT_ON | KeyEvent.META_SHIFT_ON));
+                  ic.sendKeyEvent(
+                		  new KeyEvent(
+                				  now-1,now-1,
+                				  KeyEvent.ACTION_UP,
+                				  primaryCode,0,KeyEvent.META_SHIFT_LEFT_ON | KeyEvent.META_SHIFT_ON));
+                  ic.sendKeyEvent(
+                		  new KeyEvent(
+                				  now,now,
+                				  KeyEvent.ACTION_UP,
+                				  KeyEvent.KEYCODE_SHIFT_LEFT,0));
+                  //Yes This Works!
+                  Log.d(TAG,"Sending shifted DPAD action ");
+                  return;
+              }
+			  else {
+				  //not shifted perhaps, send it raw
+				  Log.d(TAG,"sending unshifted DPAD action");
+				  keyDownUp(primaryCode);
+			  }
+			
+            return;
 		}
 		
 		if (isWordSeparator(primaryCode)) {
