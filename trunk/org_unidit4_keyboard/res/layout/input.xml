@@ -18,7 +18,7 @@
 */
 -->
 
-<com.laurent2o1o.keyboard.LatinKeyboardView
+<org.unidit4.keyboard.LatinKeyboardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/keyboard"
         android:layout_alignParentBottom="true"
