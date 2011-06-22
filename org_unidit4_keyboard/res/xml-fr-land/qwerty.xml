@@ -26,7 +26,6 @@
     >
 
     <Row>
-    
     	<Key android:codes="-2" android:keyLabel="123" android:keyWidth="10%p" android:keyEdgeFlags="left"/>
         <Key android:codes="97,224,230" android:keyLabel="a"  
         		android:popupKeyboard="@xml/kbd_popup_template"
@@ -50,7 +49,7 @@
                 android:popupCharacters="@string/alternates_for_o"/>
         <Key android:codes="112" android:keyLabel="p"/>
         <Key android:codes="40,41" android:keyLabel="( )" />
-		<Key android:codes="19" android:keyLabel="▲" />
+		<Key android:codes="19" android:keyLabel="▲"  android:isRepeatable="true"/>
 		<Key android:codes="63,64,33" android:keyLabel="\?\@!"
                 android:keyWidth="10%p" android:keyEdgeFlags="right"/>
       
@@ -72,8 +71,8 @@
         <Key android:codes="107" android:keyLabel="k"/>
         <Key android:codes="108" android:keyLabel="l"/>
         <Key android:codes="109" android:keyLabel="m"/>
-        <Key android:codes="21" android:keyLabel="◀"/>
-        <Key android:codes="22" android:keyLabel="▶"/>
+        <Key android:codes="21" android:keyLabel="◀" android:isRepeatable="true"/>
+        <Key android:codes="22" android:keyLabel="▶" android:isRepeatable="true"/>
         <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete" 
                 android:keyWidth="10%p" android:keyEdgeFlags="right"
                 android:isRepeatable="true"/>
@@ -96,7 +95,7 @@
 		<Key android:codes="46,44,8230" android:keyLabel=".,"/>
 		<Key android:codes="39,34" android:keyLabel="' &#x0022;"/>
 		<Key android:codes="45,58" android:keyLabel="-:"/>
- 		<Key android:codes="20" android:keyLabel="▼"/>               
+ 		<Key android:codes="20" android:keyLabel="▼" android:isRepeatable="true"/>               
 :       <Key android:codes="10" android:keyIcon="@drawable/sym_keyboard_return" 
                 android:keyWidth="10%p" android:keyEdgeFlags="right"/>
    </Row>
