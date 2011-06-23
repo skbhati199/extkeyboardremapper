@@ -56,6 +56,10 @@ public class SoftKeyboard extends InputMethodService implements
 		KeyboardView.OnKeyboardActionListener {
 	static final boolean DEBUG = true;
 	static final boolean FORCE_KEYBOARD = true; // to force keyboard showup in emulator TODO remove this later
+	
+	static final int KEYCODE_CAPS_LOCK=115; //For compatibility get the same as in API level 11
+	static final int KEYCODE_FORWARD_DEL=112; // Same as above
+	
 	private static final String TAG = "myIME";
 	private static int TOAST_DELAY=1000; // minimum millisecond between toasts
 	private boolean mDisplaySoftKeyboardAlways;
@@ -86,6 +90,7 @@ public class SoftKeyboard extends InputMethodService implements
 	// added
 	private int mLastDisplayWidth;
 	private boolean mCapsLock;
+	private boolean mExternalCapsLock;
 	private long mLastShiftTime;
 	private long mMetaState;
 
@@ -136,6 +141,9 @@ public class SoftKeyboard extends InputMethodService implements
 		mKeyMap.loadScanToKey("/sdcard/keyremap/s2k.cfg");
 		Log.d(TAG, "Loading Glyph substitution");
 		mKeyMap.loadGlyphs("/sdcard/keyremap/k2g.cfg");
+		
+		//set the initial state of the external keyboard capslock mode TODO is there a way to detect it ?
+		mExternalCapsLock=false;
 	}
 	
 	@Override
@@ -745,6 +753,13 @@ public class SoftKeyboard extends InputMethodService implements
 						keyCode, event);
 			}
 		}
+		
+		//handle external caps lock
+		if (event.getKeyCode() == this.KEYCODE_CAPS_LOCK){
+			mExternalCapsLock = ! mExternalCapsLock;
+			
+		}
+		
 //		ImageView icone= (ImageView) mInputView.findViewById(R.id.kbdIcon);
 //		if (icone == null){Log.e(TAG,"didn't find icon");} else {icone.setImageResource(R.drawable.unset);}
 		return super.onKeyUp(keyCode, event);
