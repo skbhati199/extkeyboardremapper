@@ -21,7 +21,6 @@
 package org.unidit4.keyboard;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
@@ -62,7 +61,7 @@ public class SoftKeyboard extends InputMethodService implements
 	
 	private static final String TAG = "myIME";
 	private static int TOAST_DELAY=1000; // minimum millisecond between toasts
-	private boolean mDisplaySoftKeyboardAlways;
+	
 	private Toast mToaster;
 	private AlertDialog mOptionsDialog;
 	private KeyRemapper mKeyMap ;
@@ -85,7 +84,7 @@ public class SoftKeyboard extends InputMethodService implements
 	private boolean mPredictionOn;
 	private boolean mCompletionOn;
 	// added for bt
-	private boolean mRemapForBT;
+	private boolean mEnableKeyRemapping;
 	private boolean mToastOnKeys;
 	// added
 	private int mLastDisplayWidth;
@@ -129,8 +128,8 @@ public class SoftKeyboard extends InputMethodService implements
 		super.onCreate();
 		mWordSeparators = getResources().getString(R.string.word_separators);
 		Log.d(TAG, "onCreate");
-		mRemapForBT = true;
-		mDisplaySoftKeyboardAlways=false;
+		mEnableKeyRemapping = true;
+		
 		mToastOnKeys=false;
 		if (mKeyMap != null) {
 			mKeyMap.clear();
@@ -501,15 +500,18 @@ public class SoftKeyboard extends InputMethodService implements
 	 * Use this to monitor key events being delivered to the application. We get
 	 * first crack at them, and can either resume them or let them continue to
 	 * the app.
+	 * returning false means that the event was not handled and its up to system to
+	 * deal with it
+	 * returning true means that we handled the event. 
 	 */
 	@Override
 	public boolean  onKeyDown(int keyCode, KeyEvent event) {
 		int devId = event.getDeviceId();
 		Log.w(TAG, "KEYDOWN keycode:" + keyCode + " event:" + event
 				+ " From device : " + devId);
-		
+		// Temporary hack to allow keycode / scancode display for remapping
 		if(mToastOnKeys) {
-			// do not retoast too fast
+			// do not re-toast too fast
 			if (mLastToast < event.getEventTime() - TOAST_DELAY){
 			//Context context = getApplicationContext();
 			CharSequence text = "Physical (Scancode): "+event.getScanCode()+"\nLogical (Keycode): "+event.getKeyCode() + " '"+event.getDisplayLabel() + "' key";
@@ -519,24 +521,26 @@ public class SoftKeyboard extends InputMethodService implements
 			}
 			mLastToast=event.getEventTime();
 		}
-
+		// Condition on keyboard device devId
+		// Archos 4 buttons home back ... is always -1
+		// Softkeyboard is 0
+		// Any devId >0 should be hard keyboard
 		if (devId > 0) {
 			// External keyboard : get the property
-			// here, we could substitute mappings!
-
+			// here, we could autoload device specific remaping
 		} else if (devId < 0) {
-			// This is onscreen keyboard, we do not want to treat this
+			// This is archos onscreen keyboard, we do not want to mess with this
 			Log.d(TAG, "Don't want to remap key for this device");
 			if (keyCode==KeyEvent.KEYCODE_HOME) {
 				Log.d(TAG,"This was the HOME key, returning false...");
+				//We expicitely do not handle archos home key
 				return false;
 			}
+			//we default on the default behavior
 			return super.onKeyDown(keyCode, event); // or false ?
 		}
 		
-
-//		ImageView icone= (ImageView) mInputView.findViewById(R.id.kbdIcon);
-//		if (icone == null){Log.e(TAG,"didn't find icon");} else {icone.setImageResource(R.drawable.unset);}
+		// handle the key
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_SEARCH:
 		case KeyEvent.KEYCODE_HOME:
@@ -589,22 +593,13 @@ public class SoftKeyboard extends InputMethodService implements
 				
 				// Magic keys : toggle remapping by alt+web
 				if ((keyCode == 0) && (event.getScanCode() == 172)) {
-					mRemapForBT = !mRemapForBT;
-					Log.e(TAG, "Remapping is now " + mRemapForBT);
+					mEnableKeyRemapping = !mEnableKeyRemapping;
+					Log.e(TAG, "Remapping is now " + mEnableKeyRemapping);
 					return true; // let it pass through
 				}//special key
 
-				// Force soft keyboard display with alt+enter
-//				if ((keyCode==KeyEvent.KEYCODE_SPACE)&&(event.isShiftPressed())){
-//					mDisplaySoftKeyboardAlways=! mDisplaySoftKeyboardAlways;
-//					Log.e(TAG,"DisplaySoftKeyboardAlways is now " +mDisplaySoftKeyboardAlways);
-////					if(mDisplaySoftKeyboardAlways) showWindow(true);
-////					else hideWindow();
-//					//TODO cancel shift state
-//					return true;
-//				}
-				// RAW REMAP of my bluetooth keyboard
-				if (mRemapForBT) {
+
+				if (mEnableKeyRemapping) {
 					Log.d(TAG, "Remapping...");
 					// Fetch a keycode substitution if any
 					if (mKeyMap == null) {
@@ -630,6 +625,7 @@ public class SoftKeyboard extends InputMethodService implements
 							int metastate = event.getMetaState();
 							// find index meta from metaState
 							if ((metastate & KeyEvent.META_ALT_ON) != 0) {
+								//TODO should we clear meta states if they are locked?
 								metaIndex = KeyRemapper.ALT_INDEX;
 								ic.clearMetaKeyStates(KeyEvent.META_ALT_ON);
 							} else if ((metastate & KeyEvent.META_SHIFT_ON) != 0) {
@@ -646,8 +642,10 @@ public class SoftKeyboard extends InputMethodService implements
 							//First, we try to translate this glyph into key events
 							//retrieve the keycharacter map from the event
 							//TODO this is ineffective : cache it ?
+							//TODO the handlechar method should rely on this : factorize
 							KeyCharacterMap myMap=KeyCharacterMap.load(event.getDeviceId());
 							KeyEvent evs[]=null;
+							//TODO there should be a better way to do this
 							char chars[]={' '};
 							chars[0]=UTF16_char;
 							// retrieve the key events that could have produced this glyph
@@ -659,8 +657,10 @@ public class SoftKeyboard extends InputMethodService implements
 								for (int i=0; i< evs.length;i++) ic.sendKeyEvent(evs[i]);
 								return true;
 							}
+							
 							// If we are still there, events could not be found to reproduce the glyph
 							// just try to write the glyph directly
+							
 							
 							
 							// We first want to see if connected output can handle glyphs
@@ -688,13 +688,19 @@ public class SoftKeyboard extends InputMethodService implements
 
 					}//if Glyph Substitution
 					
+					/*
+					 * Glyph substitution was handled above
+					 * Let's handle the keycode 
+					 */
 					if (newKeyCode == null) {
+						//there was no substitution, let's use default behaviour
 						Log.d(TAG, "This key is not remapped backing on super.onKeyDown");
 						return super.onKeyDown(keyCode,event);
 					}
 
-					// remaps are okay here
+					// There was a Remapping, we send the modified keycode
 					// send Down/Up
+					//TODO the test is not necessarily necessary since we returned before
 					if ((newKeyCode != null) && (glyphs == null)) {
 						// new keycode without glyph substitution
 						// send up/down key
@@ -708,6 +714,8 @@ public class SoftKeyboard extends InputMethodService implements
 						Log.d(TAG,
 								"keycode subst with no glyph subst : Send keyDown/Up to Connection "
 										+ nk);
+						
+						//TODO Factorize! 
 						InputConnection ic = getCurrentInputConnection();
 						if (ic != null) {
 							// send the event
@@ -723,7 +731,7 @@ public class SoftKeyboard extends InputMethodService implements
 						}//ic!=null
 					}//if newKeyCode
 
-				}// if mRemapBT
+				}// if Remapping
 
 				// if (mPredictionOn && translateKeyDown(keyCode, event)) {
 				// return true;
@@ -755,7 +763,7 @@ public class SoftKeyboard extends InputMethodService implements
 		}
 		
 		//handle external caps lock
-		if (event.getKeyCode() == this.KEYCODE_CAPS_LOCK){
+		if (event.getKeyCode() == SoftKeyboard.KEYCODE_CAPS_LOCK){
 			mExternalCapsLock = ! mExternalCapsLock;
 			
 		}
