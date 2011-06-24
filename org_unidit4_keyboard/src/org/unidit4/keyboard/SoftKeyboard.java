@@ -596,7 +596,7 @@ public class SoftKeyboard extends InputMethodService implements
 					mEnableKeyRemapping = !mEnableKeyRemapping;
 					Log.e(TAG, "Remapping is now " + mEnableKeyRemapping);
 					return true; // let it pass through
-				}//special key
+				}//special key TODO change this to another combination
 
 
 				if (mEnableKeyRemapping) {
@@ -638,6 +638,11 @@ public class SoftKeyboard extends InputMethodService implements
 								metaIndex = KeyRemapper.NORMAL_INDEX;
 							}
 							char UTF16_char=glyphs[metaIndex];
+							//TODO CAPS-LOCK support
+							// Here we should use toUpperCase() to systematically capitalize
+							// letters
+							//TODO CAPS-LOCK support
+							
 							
 							//First, we try to translate this glyph into key events
 							//retrieve the keycharacter map from the event
@@ -694,11 +699,13 @@ public class SoftKeyboard extends InputMethodService implements
 					 */
 					if (newKeyCode == null) {
 						//there was no substitution, let's use default behaviour
+						//TODO capitalize based on ExternalKeyboardCapsLock
+						// this means : get the produced char, capitalize it then recombine it as raw events and send it if necessary
 						Log.d(TAG, "This key is not remapped backing on super.onKeyDown");
 						return super.onKeyDown(keyCode,event);
 					}
 
-					// There was a Remapping, we send the modified keycode
+					// There was a Remapping, we should send the modified keycode
 					// send Down/Up
 					//TODO the test is not necessarily necessary since we returned before
 					if ((newKeyCode != null) && (glyphs == null)) {
@@ -706,6 +713,8 @@ public class SoftKeyboard extends InputMethodService implements
 						// send up/down key
 						// we changed something, let's transmit this
 						// Build a new event with the substituted keycode
+						//TODO capitalize based on ExternalKeyboardCapsLock
+						// this means : get the produced char, capitalize it then recombine it as raw events and send it if necessary
 						KeyEvent nk = new KeyEvent(event.getDownTime(),
 								event.getEventTime(), event.getAction(),
 								keyCode, event.getRepeatCount(),
