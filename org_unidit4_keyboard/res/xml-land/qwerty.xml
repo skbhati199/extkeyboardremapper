@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
 **
@@ -48,7 +48,7 @@
         <Key android:codes="40,41" android:keyLabel="( )" />
 ﻿  ﻿  <Key android:codes="19" android:keyLabel="▲"  android:isRepeatable="true"/>
 ﻿  ﻿  <Key android:codes="63,64,33" android:keyLabel="\?\@!"
-                android:keyWidth="10%p" android:keyEdgeFlags="right"/>
+                android:keyWidth="10%p" android:keyEdgeFlags="right"/> 
       
     </Row>
     
@@ -65,7 +65,7 @@
         <Key android:codes="106" android:keyLabel="j"/>
         <Key android:codes="107" android:keyLabel="k"/>
         <Key android:codes="108" android:keyLabel="l"/>
-        <Key android:codes="109" android:keyLabel="m"/>
+		﻿  <Key android:codes="46,44,8230" android:keyLabel=".,"/>
         <Key android:codes="21" android:keyLabel="◀" android:isRepeatable="true"/>
         <Key android:codes="22" android:keyLabel="▶" android:isRepeatable="true"/>
         <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete"
@@ -82,9 +82,10 @@
         <Key android:codes="118" android:keyLabel="v"/>
         <Key android:codes="98" android:keyLabel="b"/>
         <Key android:codes="110" android:keyLabel="n"/>
-        <Key android:codes="32" android:keyIcon="@drawable/sym_keyboard_space"
+		<Key android:codes="109" android:keyLabel="m"/>
+		<Key android:codes="32" android:keyIcon="@drawable/sym_keyboard_space"
                 android:keyWidth="13.2%p" android:isRepeatable="true"/>
-﻿  ﻿  <Key android:codes="46,44,8230" android:keyLabel=".,"/>
+
 ﻿  ﻿  <Key android:codes="39,34" android:keyLabel="' &#x0022;"/>
 ﻿  ﻿  <Key android:codes="45,58" android:keyLabel="-:"/>
  ﻿  ﻿  <Key android:codes="20" android:keyLabel="▼" android:isRepeatable="true"/>               
